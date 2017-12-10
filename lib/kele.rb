@@ -38,8 +38,22 @@ class Kele
                 'recipient_id': recipient_id,
                 'token': token,
                 'subject': subject,
-                'stripped-text': content,
+                'stripped-text': content
             },
-            headers: { "authorization" => @auth_token })
+            headers: { "authorization" => @auth_token }
+        )
+    end
+    
+    def create_submission(checkpoint_id, assignment_branch, assignment_commit_link, comment, enrollment_id)
+        self.class.post('https://www.bloc.io/api/v1/checkpoint_submissions',
+            body: {
+                'checkpoint_id': checkpoint_id,
+                'assignment_branch': assignment_branch,
+                'assignment_commit_link': assignment_commit_link,
+                'comment': comment,
+                'enrollment_id': enrollment_id
+            },
+            headers: { "authorization" => @auth_token }
+        )
     end    
 end
