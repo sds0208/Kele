@@ -1,6 +1,6 @@
 require 'httparty'
 require 'json'
-require 'roadmap.rb'
+require './lib/roadmap.rb'
 
 class Kele
     include HTTParty
@@ -31,17 +31,16 @@ class Kele
         @messages = JSON.parse(response.body)
     end
     
-    def create_messages(user_id, recipient_id, token=nil, subject, content)
-        self.class.post('https://www.bloc.io/api/v1/messages', 
-            body:  {
-                'user_id': user_id,
+    def create_messages(sender, recipient_id, subject, content, token=nil)
+        options={body:  {
+                'sender': send,
                 'recipient_id': recipient_id,
-                'token': token,
                 'subject': subject,
                 'stripped-text': content
             },
-            headers: { "authorization" => @auth_token }
-        )
+            headers: { "authorization" => @auth_token }}
+            options[:token] = token if token
+        self.class.post('https://www.bloc.io/api/v1/messages', options)
     end
     
     def create_submission(checkpoint_id, assignment_branch, assignment_commit_link, comment, enrollment_id)
